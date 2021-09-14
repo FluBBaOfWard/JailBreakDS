@@ -1,0 +1,21 @@
+[submodule "arm9/source/Shared"]
+	path = arm9/source/Shared
+	url = https://github.com/FluBBaOfWard/NDS_Shared.git
+[submodule "arm9/source/VLM5030"]
+	path = arm9/source/VLM5030
+	url = https://github.com/FluBBaOfWard/VLM5030.git
+[submodule "arm7/source/VLM5030"]
+	path = arm7/source/VLM5030
+	url = https://github.com/FluBBaOfWard/VLM5030.git
+[submodule "arm9/source/SN76496"]
+	path = arm9/source/SN76496
+	url = https://github.com/FluBBaOfWard/SN76496.git
+[submodule "arm7/source/SN76496"]
+	path = arm7/source/SN76496
+	url = https://github.com/FluBBaOfWard/SN76496.git
+[submodule "arm9/source/K005849"]
+	path = arm9/source/K005849
+	url = https://github.com/FluBBaOfWard/K005849.git
+[submodule "arm9/source/ARM6809"]
+	path = arm9/source/ARM6809
+	url = https://github.com/FluBBaOfWard/ARM6809.git

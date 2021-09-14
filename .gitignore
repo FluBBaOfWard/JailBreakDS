@@ -1,0 +1,8 @@
+*.nds
+*.zip
+JailBreakDS.xcodeproj/xcuserdata
+JailBreakDS.xcodeproj/project.xcworkspace/xcuserdata
+*.elf
+arm7/build
+arm9/build
+arm9/include/jailbrek

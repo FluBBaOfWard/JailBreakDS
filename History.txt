@@ -1,0 +1,23 @@
+JailBreakDS revision history
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+
+V0.3.6 - 2021-03-23 (FluBBa)
+	Added Jail Break Bootleg.
+	Added save states.
+
+V0.3.1 - 2020-06-08 (FluBBa)
+	Added support for flipped sprites.
+
+V0.3.0 - 2018-07-12 (FluBBa)
+	Added VLM5030 soundchip.
+
+V0.2.1 - 2018-05-10 (FluBBa)
+	Code clean up.
+
+V0.2.0 - 2018-04-20 (FluBBa)
+	Lots of fixes.
+
+V0.1.0 - 2016-08-07 (FluBBa)
+   Initial version, plays Jail Break.
+
