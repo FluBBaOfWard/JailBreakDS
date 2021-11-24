@@ -49,6 +49,8 @@
 		9C8A88C924D47A09008C7DFF /* vlm5030.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = vlm5030.c; sourceTree = "<group>"; };
 		9C8A88CA24D47A09008C7DFF /* History.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = History.txt; sourceTree = "<group>"; };
 		9C8A88CB24D47A09008C7DFF /* vlm5030.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vlm5030.h; sourceTree = "<group>"; };
+		9CAB1A15274E1C9900182F62 /* VLM503Asm.s */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.asm; path = VLM503Asm.s; sourceTree = "<group>"; };
+		9CAB1A16274E1D9400182F62 /* VLM503Asm.s */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.asm; path = VLM503Asm.s; sourceTree = "<group>"; };
 		9CB812A824C39B3500A02C09 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		9CB812AA24C39B3500A02C09 /* Sound.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Sound.h; sourceTree = "<group>"; };
 		9CB812AB24C39B3500A02C09 /* Sound.s */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.asm; path = Sound.s; sourceTree = "<group>"; };
@@ -168,6 +170,7 @@
 				9C8A88C824D47A09008C7DFF /* VLM5030_todo.txt */,
 				9C8A88CA24D47A09008C7DFF /* History.txt */,
 				9C8A88C724D47A09008C7DFF /* Version.h */,
+				9CAB1A16274E1D9400182F62 /* VLM503Asm.s */,
 				9C8A88CB24D47A09008C7DFF /* vlm5030.h */,
 				9C8A88C924D47A09008C7DFF /* vlm5030.c */,
 			);
@@ -204,6 +207,7 @@
 				9CB812B024C39B3500A02C09 /* VLM5030_todo.txt */,
 				9CB812B224C39B3500A02C09 /* History.txt */,
 				9CB812AF24C39B3500A02C09 /* Version.h */,
+				9CAB1A15274E1C9900182F62 /* VLM503Asm.s */,
 				9CB812B324C39B3500A02C09 /* vlm5030.h */,
 				9CB812B124C39B3500A02C09 /* vlm5030.c */,
 			);

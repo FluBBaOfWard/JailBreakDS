@@ -2,6 +2,9 @@ JailBreakDS revision history
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 
+V0.3.7 - 2021-11-24 (FluBBa)
+	Updated submodules.
+
 V0.3.6 - 2021-03-23 (FluBBa)
 	Added Jail Break Bootleg.
 	Added save states.
