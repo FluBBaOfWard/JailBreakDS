@@ -13,7 +13,7 @@
 #include "K005849/Version.h"
 #include "SN76496/Version.h"
 
-#define EMUVERSION "V0.3.6 2021-11-24"
+#define EMUVERSION "V0.3.7 2022-08-23"
 
 const fptr fnMain[] = {nullUI, subUI, subUI, subUI, subUI, subUI, subUI, subUI, subUI, subUI};
 
@@ -129,10 +129,10 @@ void uiController() {
 void uiDisplay() {
 	setupSubMenu(" Display Settings");
 	drawSubItem("Display: ", dispTxt[g_scaling]);
-	drawSubItem("Scaling: ", flickTxt[g_flicker]);
+	drawSubItem("Scaling: ", flickTxt[gFlicker]);
 	drawSubItem("Gamma: ", brighTxt[g_gammaValue]);
-	drawSubItem("Disable Background: ", autoTxt[g_gfxMask&1]);
-	drawSubItem("Disable Sprites: ", autoTxt[(g_gfxMask>>4)&1]);
+	drawSubItem("Disable Background: ", autoTxt[gGfxMask&1]);
+	drawSubItem("Disable Sprites: ", autoTxt[(gGfxMask>>4)&1]);
 }
 
 void uiSettings() {
@@ -217,11 +217,11 @@ void gammaSet() {
 
 /// Turn on/off rendering of background
 void bgrLayerSet(){
-	g_gfxMask^=0x0F;
+	gGfxMask^=0x0F;
 }
 /// Turn on/off rendering of sprites
 void sprLayerSet(){
-	g_gfxMask^=0x10;
+	gGfxMask^=0x10;
 }
 
 

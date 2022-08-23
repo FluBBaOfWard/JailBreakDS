@@ -19,7 +19,7 @@ include $(DEVKITARM)/ds_rules
 BUILD		:=	build
 SOURCES		:=	source	\
 				source/Shared \
-				source/Shared/unzip \
+				source/Shared/Unzip \
 				source/ARM6809 \
 				source/K005849 \
 				source/VLM5030 \

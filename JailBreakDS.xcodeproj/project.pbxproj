@@ -288,7 +288,7 @@
 			isa = PBXGroup;
 			children = (
 				9C7BB96026009B6100EA9C9C /* graphics */,
-				9CB812E024C39B3500A02C09 /* unzip */,
+				9CB812E024C39B3500A02C09 /* Unzip */,
 				9CBEE11326F123D10095347A /* README.md */,
 				9CB812E524C39B3500A02C09 /* nds_asm.h */,
 				9CBEE11226F123D00095347A /* EmuSettings.h */,
@@ -306,7 +306,7 @@
 			path = Shared;
 			sourceTree = "<group>";
 		};
-		9CB812E024C39B3500A02C09 /* unzip */ = {
+		9CB812E024C39B3500A02C09 /* Unzip */ = {
 			isa = PBXGroup;
 			children = (
 				9CB812E324C39B3500A02C09 /* unzipnds.h */,
@@ -314,7 +314,7 @@
 				9CB812E224C39B3500A02C09 /* puff.h */,
 				9CB812E424C39B3500A02C09 /* puff.c */,
 			);
-			path = unzip;
+			path = Unzip;
 			sourceTree = "<group>";
 		};
 		9CB812ED24C39B3500A02C09 /* ARM6809 */ = {
@@ -406,7 +406,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DEVKITARM = $DEVKITPRO/devkitarm;
-				DEVKITPRO = /opt/devkitpro_old;
+				DEVKITPRO = /opt/devkitpro;
 				PRODUCT_NAME = JailBreakDS;
 			};
 			name = Debug;

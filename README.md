@@ -1,4 +1,4 @@
-# JailBreakDS V0.3.6
+# JailBreakDS V0.3.7
 
 This is a Jail Break - Arcade emulator for the NDS.
 It has bugs in the sprite rendering and no tile priority support.

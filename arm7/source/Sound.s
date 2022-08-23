@@ -9,7 +9,6 @@
 	.global soundRenderer
 	.global setMuteSoundGUI
 	.global setMuteSoundGame
-	.global getRandomNumber
 	.global sn76496Ptr
 
 
@@ -172,17 +171,6 @@ silenceLoop:
 	bhi silenceLoop
 
 	ldmfd sp!,{r4-r10,lr}
-	bx lr
-
-;@----------------------------------------------------------------------------
-getRandomNumber:
-	.type getRandomNumber STT_FUNC
-;@----------------------------------------------------------------------------
-	ldr r0,lfsr
-	movs r0,r0,lsr#1
-	eorcs r0,r0,#0x9000
-	str r0,lfsr
-	and r0,r0,#1
 	bx lr
 
 ;@----------------------------------------------------------------------------
