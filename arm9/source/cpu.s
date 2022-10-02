@@ -5,8 +5,8 @@
 #include "ARM6809/ARM6809.i"
 #include "K005849/K005849.i"
 
-	.global cpuReset
 	.global run
+	.global cpuReset
 	.global frameTotal
 	.global waitMaskIn
 	.global waitMaskOut
@@ -87,7 +87,7 @@ konamiFrameLoop:
 
 ;@----------------------------------------------------------------------------
 cyclesPerScanline:	.long 0
-frameTotal:			.long 0		;@ Let ui.c see frame count for savestates
+frameTotal:			.long 0		;@ Let Gui.c see frame count for savestates
 waitCountIn:		.byte 0
 waitMaskIn:			.byte 0
 waitCountOut:		.byte 0

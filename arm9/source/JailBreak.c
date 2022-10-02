@@ -47,7 +47,7 @@ static const ArcadeRom jailbrekRoms[13] = {
 	{"507j11.2f",  0x0020, 0xf70bb122},
 	{"507j13.7f",  0x0100, 0xd4fe5c97},
 	{"507j12.6f",  0x0100, 0x0266c7db},
-	// ROM_REGION( 0x4000, "vlm", 0 ) /* speech rom */
+	// ROM_REGION( 0x4000, "vlm", 0 ) // Speech rom
 	{"507l01.8c",  0x4000, 0x0c8a3605},
 };
 
@@ -63,13 +63,13 @@ static const ArcadeRom jailbrekbRoms[9] = {
 	{"prom.i2", 0x0020, 0xf70bb122},
 	{"prom.d6", 0x0100, 0xd4fe5c97},
 	{"prom.e6", 0x0100, 0x0266c7db},
-	// ROM_REGION( 0x2000, "vlm", 0 ) /* speech rom */
+	// ROM_REGION( 0x2000, "vlm", 0 ) // Speech rom
 	{"2.i6",    0x2000, 0xd91d15e3},
 	// ROM_REGION( 0x0004, "plds", 0 )
-	//{"k4.bin",  0x0001, NO_DUMP ) /* PAL16L8 */
-	//{"a7.bin",  0x0001, NO_DUMP ) /* PAL16R4 */
-	//{"g9.bin",  0x0001, NO_DUMP ) /* PAL16R6 */
-	//{"k8.bin",  0x0001, NO_DUMP ) /* PAL16L8 */
+	//{"k4.bin",  0x0001, NO_DUMP ) // PAL16L8
+	//{"a7.bin",  0x0001, NO_DUMP ) // PAL16R4
+	//{"g9.bin",  0x0001, NO_DUMP ) // PAL16R6
+	//{"k8.bin",  0x0001, NO_DUMP ) // PAL16L8
 };
 
 static const ArcadeRom manhatanRoms[13] = {
@@ -88,12 +88,12 @@ static const ArcadeRom manhatanRoms[13] = {
 	{"507j11.2f",  0x0020, 0xf70bb122},
 	{"507j13.7f",  0x0100, 0xd4fe5c97},
 	{"507j12.6f",  0x0100, 0x0266c7db},
-	// ROM_REGION( 0x4000, "vlm", 0 ) /* speech rom */
+	// ROM_REGION( 0x4000, "vlm", 0 ) // Speech rom
 	{"507p01.8c",  0x4000, 0x973fa351},
 };
 
-const ArcadeGame games[GAME_COUNT] = {
-	{"jailbrek",  "Jail Break", 13, jailbrekRoms},
-	{"jailbrekb", "Jail Break (bootleg)", 8, jailbrekbRoms},
-	{"manhatan",  "Manhattan 24 Bunsyo (Japan)", 13, manhatanRoms},
+const ArcadeGame jailbrekGames[GAME_COUNT] = {
+	AC_GAME("jailbrek",  "Jail Break", jailbrekRoms)
+	AC_GAME("jailbrekb", "Jail Break (bootleg)", jailbrekbRoms)
+	AC_GAME("manhatan",  "Manhattan 24 Bunsyo (Japan)", manhatanRoms)
 };

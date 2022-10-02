@@ -5,6 +5,8 @@
 extern "C" {
 #endif
 
+#include "JailBreak.h"
+
 #define FILEEXTENSIONS ".zip"
 
 int loadSettings(void);
