@@ -5,7 +5,10 @@
 #include "ARM6809/ARM6809.i"
 #include "K005849/K005849.i"
 
+#define CYCLE_PSL (99)
+
 	.global run
+	.global stepFrame
 	.global cpuReset
 	.global frameTotal
 	.global waitMaskIn
@@ -15,10 +18,14 @@
 	.syntax unified
 	.arm
 
-	.section .text
+#if GBA
+	.section .ewram, "ax", %progbits	;@ For the GBA
+#else
+	.section .text						;@ For anything else
+#endif
 	.align 2
 ;@----------------------------------------------------------------------------
-run:		;@ Return after 1 frame
+run:						;@ Return after 1 frame
 	.type   run STT_FUNC
 ;@----------------------------------------------------------------------------
 	ldrh r0,waitCountIn
@@ -54,6 +61,8 @@ runStart:
 ;@----------------------------------------------------------------------------
 konamiFrameLoop:
 ;@----------------------------------------------------------------------------
+	mov r0,#CYCLE_PSL
+	bl m6809RunXCycles
 	ldr koptr,=k005849_0
 	ldr r0,[koptr,#scanline]
 	ldr r1,=ipcDataUncached
@@ -61,8 +70,7 @@ konamiFrameLoop:
 	str r0,[r1,#currentScanline]
 	bl doScanline
 	cmp r0,#0
-	ldr r0,cyclesPerScanline
-	bne m6809RunXCycles
+	bne konamiFrameLoop
 ;@----------------------------------------------------------------------------
 
 	add r0,m6809optbl,#m6809Regs
@@ -94,12 +102,44 @@ waitCountOut:		.byte 0
 waitMaskOut:		.byte 0
 
 ;@----------------------------------------------------------------------------
+stepFrame:					;@ Return after 1 frame
+	.type   stepFrame STT_FUNC
+;@----------------------------------------------------------------------------
+	stmfd sp!,{r4-r11,lr}
+
+	ldr m6809optbl,=m6809OpTable
+	add r0,m6809optbl,#m6809Regs
+	ldmia r0,{m6809f-m6809pc,m6809sp}	;@ Restore M6809 state
+;@----------------------------------------------------------------------------
+konamiStepLoop:
+;@----------------------------------------------------------------------------
+	mov r0,#CYCLE_PSL
+	bl m6809RunXCycles
+	ldr koptr,=k005849_0
+	ldr r0,[koptr,#scanline]
+	ldr r1,=ipcDataUncached
+	ldr r1,[r1]
+	str r0,[r1,#currentScanline]
+	bl doScanline
+	cmp r0,#0
+	bne konamiStepLoop
+;@----------------------------------------------------------------------------
+	add r0,m6809optbl,#m6809Regs
+	stmia r0,{m6809f-m6809pc,m6809sp}	;@ Save M6809 state
+
+	ldr r1,frameTotal
+	add r1,r1,#1
+	str r1,frameTotal
+
+	ldmfd sp!,{r4-r11,lr}
+	bx lr
+;@----------------------------------------------------------------------------
 cpuReset:		;@ Called by loadCart/resetGame
 ;@----------------------------------------------------------------------------
 	stmfd sp!,{lr}
 
 ;@---Speed - 1.536MHz / 60Hz		;Jail Break.
-	ldr r0,=99
+	ldr r0,=CYCLE_PSL
 	str r0,cyclesPerScanline
 
 ;@--------------------------------------
@@ -107,11 +147,7 @@ cpuReset:		;@ Called by loadCart/resetGame
 
 	bl mapMemory
 
-	adr r0,konamiFrameLoop
-	str r0,[m6809optbl,#m6809NextTimeout]
-	str r0,[m6809optbl,#m6809NextTimeout_]
-
-	mov r0,#0
+	mov r0,m6809optbl
 	bl m6809Reset
 	ldmfd sp!,{lr}
 	bx lr
