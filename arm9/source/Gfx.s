@@ -2,7 +2,6 @@
 
 #include "Shared/nds_asm.h"
 #include "Shared/EmuSettings.h"
-#include "ARM6809/ARM6809.i"
 #include "K005849/K005849.i"
 
 	.global gfxInit
@@ -26,6 +25,7 @@
 	.global k005849_0W
 	.global emuRAM
 
+	addy		.req r12		;@ Used by CPU cores
 
 	.syntax unified
 	.arm
@@ -71,6 +71,8 @@ gfxReset:					;@ Called with CPU reset
 	ldr r2,=m6809SetFIRQPin		;@ 1/2 VBlank
 	ldr r3,=emuRAM
 	bl k005849Reset0
+	mov r0,#CHIP_K005849
+	bl k005849SetType
 	bl bgInit
 
 	ldr r0,=gGammaValue
@@ -199,6 +201,7 @@ vblIrqHandler:
 	movne r8,#0
 	add r8,r8,#0x10
 	mov r7,r8,lsl#16
+	orr r7,r7,#(GAME_WIDTH-SCREEN_WIDTH)/2
 
 	ldr r0,gFlicker
 	eors r0,r0,r0,lsl#31
@@ -284,9 +287,9 @@ endFrame:					;@ Called just before screen end (~line 240)	(r0-r2 safe to use)
 	ldr r0,=scrollTemp
 	bl copyScrollValues
 	mov r0,#BG_GFX
-	bl convertTileMap5849
+	bl convertTileMap
 	ldr r0,tmpOamBuffer
-	bl convertSprites5849
+	bl convertSprites
 ;@--------------------------
 
 	ldr r0,dmaOamBuffer
@@ -357,9 +360,7 @@ gfxState:
 adjustBlend:
 	.long 0
 windowTop:
-	.long 0
-wTop:
-	.long 0,0,0		;@ windowtop  (this label too)   L/R scrolling in unscaled mode
+	.long 0,0,0,0		;@ L/R scrolling in unscaled mode
 
 	.byte 0
 	.byte 0
@@ -372,8 +373,6 @@ OAM_BUFFER1:
 	.space 0x400
 OAM_BUFFER2:
 	.space 0x400
-DMA0BUFF:
-	.space 0x200
 SCROLLBUFF:
 	.space 0x400*2				;@ Scrollbuffer.
 MAPPED_RGB:

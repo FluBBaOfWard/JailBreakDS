@@ -8,6 +8,7 @@
 
 /* Begin PBXFileReference section */
 		746D78E114ED9A8400CC738F /* Makefile */ = {isa = PBXFileReference; explicitFileType = sourcecode.make; fileEncoding = 4; path = Makefile; sourceTree = "<group>"; };
+		9C23CA9E29EAC12E007DD39E /* ArcadeRoms.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = ArcadeRoms.c; sourceTree = "<group>"; };
 		9C294944260A7A7200EDA7C9 /* jailbrek.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = jailbrek.cpp; sourceTree = "<group>"; };
 		9C294945260A7A7200EDA7C9 /* jailbrekVideo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = jailbrekVideo.cpp; sourceTree = "<group>"; };
 		9C2DC4592615EFEC0008309E /* ArcadeRoms.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArcadeRoms.h; sourceTree = "<group>"; };
@@ -300,6 +301,7 @@
 				9CB812E624C39B3500A02C09 /* crc32.c */,
 				9C2DC45A2615EFEC0008309E /* EmubaseAC.h */,
 				9C2DC4592615EFEC0008309E /* ArcadeRoms.h */,
+				9C23CA9E29EAC12E007DD39E /* ArcadeRoms.c */,
 			);
 			path = Shared;
 			sourceTree = "<group>";

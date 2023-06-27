@@ -75,10 +75,10 @@ scanlineLoop:
 	bpl scanlineLoop
 	sub r3,r0,r5
 	mov r5,r0
-	mov r1,#99				;@ Cycles per scanline for SN76496
+	mov r1,#96				;@ Cycles per scanline for SN76496
 	mul r1,r3,r1
 	add r6,r6,r1
-	mov r1,#120				;@ Cycles per scanline for VLM5030
+	mov r1,#116				;@ Cycles per scanline for VLM5030
 	mul r1,r3,r1
 	add r7,r7,r1
 	mov r0,r6,lsr#4			;@ output frequency is OSC/16
@@ -99,7 +99,8 @@ scanlineLoop:
 	ldr r0,[r0]
 	bl vlm5030_update_callback
 
-	cmp r5,#256
+	ldr r0,=262
+	cmp r5,r0
 	bmi scanlineLoop
 
 	ldmfd sp!,{r4-r7,lr}
@@ -118,26 +119,26 @@ soundMixer:					;@ r0=length, r1=pointer
 	ldr r2,pcmPtr0
 	ldr r6,renderPtr0
 	sub r6,r6,r2
-	mov r6,r6,lsr#1			;@ bytes to samples, should be 1584 (99*256/16).
+	mov r6,r6,lsr#1			;@ bytes to samples, should be 1572 (96*262/16).
 	rsb r7,r6,#0
 
 	ldr r8,pcmPtr1
 	ldr r9,renderPtr1
 	sub r9,r9,r8
-//	mov r9,r9,lsr#1			;@ bytes to samples, should be 198 (99*256/128).
+//	mov r9,r9,lsr#1			;@ bytes to samples, should be 196.5 (96*262/128).
 	rsb r10,r5,#0
 
 	ldr lr,filter
 mixLoop:
-	ldrsh r3,[r2],#2
-	adds r7,r7,r5
-	subcs r7,r7,r6
-	addcc r2,r2,#2
+	ldrsh r3,[r2]
+	adds r7,r7,r6
+	subcs r7,r7,r5
+	addcs r2,r2,#2
 
-	ldrsh r4,[r2],#2
-	adds r7,r7,r5
-	subcs r7,r7,r6
-	addcc r2,r2,#2
+	ldrsh r4,[r2]
+	adds r7,r7,r6
+	subcs r7,r7,r5
+	addcs r2,r2,#2
 
 	add r3,r3,r4
 

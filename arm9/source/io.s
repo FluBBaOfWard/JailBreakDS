@@ -1,6 +1,5 @@
 #ifdef __arm__
 
-#include "ARM6809/ARM6809.i"
 #include "K005849/K005849.i"
 
 	.global ioReset
@@ -16,6 +15,8 @@
 	.global gDipSwitch3
 	.global coinCounter0
 	.global coinCounter1
+
+	addy		.req r12		;@ Used by CPU cores
 
 	.syntax unified
 	.arm

@@ -5,7 +5,7 @@
 #include "ARM6809/ARM6809.i"
 #include "K005849/K005849.i"
 
-#define CYCLE_PSL (99)
+#define CYCLE_PSL (H_PIXEL_COUNT/4)
 
 	.global run
 	.global stepFrame
