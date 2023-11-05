@@ -8,6 +8,7 @@
 
 /* Begin PBXFileReference section */
 		746D78E114ED9A8400CC738F /* Makefile */ = {isa = PBXFileReference; explicitFileType = sourcecode.make; fileEncoding = 4; path = Makefile; sourceTree = "<group>"; };
+		9C1162992AF6E886003C92C0 /* EmuMenu.i */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c.preprocessed; path = EmuMenu.i; sourceTree = "<group>"; };
 		9C23CA9E29EAC12E007DD39E /* ArcadeRoms.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = ArcadeRoms.c; sourceTree = "<group>"; };
 		9C294944260A7A7200EDA7C9 /* jailbrek.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = jailbrek.cpp; sourceTree = "<group>"; };
 		9C294945260A7A7200EDA7C9 /* jailbrekVideo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = jailbrekVideo.cpp; sourceTree = "<group>"; };
@@ -291,6 +292,7 @@
 				9CBEE11326F123D10095347A /* README.md */,
 				9CB812E524C39B3500A02C09 /* nds_asm.h */,
 				9CBEE11226F123D00095347A /* EmuSettings.h */,
+				9C1162992AF6E886003C92C0 /* EmuMenu.i */,
 				9CB812DE24C39B3500A02C09 /* EmuMenu.h */,
 				9CB812EA24C39B3500A02C09 /* EmuMenu.c */,
 				9CB812E924C39B3500A02C09 /* FileHelper.h */,
