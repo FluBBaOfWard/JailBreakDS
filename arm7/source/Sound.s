@@ -87,7 +87,7 @@ scanlineLoop:
 	ldr r1,renderPtr0
 	add r2,r1,r0,lsl#1
 	str r2,renderPtr0
-	ldr snptr,sn76496Ptr
+	ldr r2,sn76496Ptr
 	bl sn76496Mixer
 
 	mov r2,r7,lsr#8			;@ output frequency is OSC/128

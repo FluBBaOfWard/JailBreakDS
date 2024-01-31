@@ -40,7 +40,7 @@ soundInit:
 soundReset:
 ;@----------------------------------------------------------------------------
 	stmfd sp!,{lr}
-	ldr snptr,sn76496Uncached
+	ldr r1,sn76496Uncached
 	mov r0,#1
 	bl sn76496Reset				;@ Sound
 	ldmfd sp!,{lr}
@@ -69,7 +69,7 @@ setMuteSoundGame:			;@ For System E ?
 SN_0_W:
 ;@----------------------------------------------------------------------------
 	stmfd sp!,{r3,lr}
-	ldr snptr,sn76496Uncached
+	ldr r1,sn76496Uncached
 	bl sn76496W
 	ldmfd sp!,{r3,lr}
 	bx lr
