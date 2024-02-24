@@ -38,7 +38,7 @@ static const u8 guiPalette[] = {
 	0xED,0xED,0xED, 0xFF,0xFF,0xFF, 0x00,0x00,0x00, 0x00,0x00,0x00, 0x00,0x00,0x00, 0x00,0x00,0x00, 0x00,0x00,0x00, 0x00,0x00,0x00,
 	0x00,0x00,0x00, 0x00,0x00,0x00, 0x70,0x70,0x20, 0x88,0x88,0x40, 0xA0,0xA0,0x60, 0xB8,0xB8,0x80, 0xD0,0xD0,0x90, 0xE8,0xE8,0xA0,
 	0xF7,0xF7,0xC0, 0xFF,0xFF,0xE0, 0x00,0x00,0x60, 0x00,0x00,0x00, 0x00,0x00,0x00, 0x00,0x00,0x00, 0x00,0x00,0x00, 0x00,0x00,0x00
-	};
+};
 
 //---------------------------------------------------------------------------------
 void myVblank(void) {
@@ -65,11 +65,12 @@ int main(int argc, char **argv) {
 	machineInit();
 	setupGUI();
 	getInput();
-	loadCart(0,0);
 	if ( initFileHelper() ) {
 		loadSettings();
 		autoLoadGame();
-	} else {
+	}
+	else {
+		loadCart(0,0);
 		drawText("fatInitDefault() failure.",23,0);
 	}
 
@@ -87,8 +88,9 @@ int main(int argc, char **argv) {
 //---------------------------------------------------------------------------------
 void pausVBlank(int count) {
 //---------------------------------------------------------------------------------
-	while (--count)
+	while (--count) {
 		waitVBlank();
+	}
 }
 
 //---------------------------------------------------------------------------------
@@ -106,7 +108,8 @@ static void checkTimeOut() {
 //---------------------------------------------------------------------------------
 	if (EMUinput) {
 		sleepTimer = sleepTime;
-	} else {
+	}
+	else {
 		sleepTimer--;
 		if (sleepTimer < 0) {
 			sleepTimer = sleepTime;
@@ -122,13 +125,16 @@ void setEmuSpeed(int speed) {
 	if (speed == 0) {			// Normal Speed
 		waitMaskIn = 0x00;
 		waitMaskOut = 0x00;
-	} else if (speed == 1) {	// Double speed
+	}
+	else if (speed == 1) {	// Double speed
 		waitMaskIn = 0x00;
 		waitMaskOut = 0x01;
-	} else if (speed == 2) {	// Max speed (4x)
+	}
+	else if (speed == 2) {	// Max speed (4x)
 		waitMaskIn = 0x00;
 		waitMaskOut = 0x03;
-	} else if (speed == 3) {	// 50% speed
+	}
+	else if (speed == 3) {	// 50% speed
 		waitMaskIn = 0x01;
 		waitMaskOut = 0x00;
 	}

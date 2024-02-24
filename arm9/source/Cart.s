@@ -10,9 +10,11 @@
 	.global emuFlags
 	.global cartFlags
 	.global romStart
+	.global mainCpu
 	.global vromBase0
 	.global vromBase1
 	.global promBase
+	.global vlmBase
 
 	.global ROM_Space
 
@@ -88,18 +90,17 @@ loadCart: 		;@ Called from C:  r0=rom number, r1=emuflags
 	mov r11,r0
 
 //	ldr r7,=rawRom
-	ldr r7,=ROM_Space
-								;@ r7=rombase til end of loadcart so DON'T FUCK IT UP
-	str r7,romStart				;@ Set rom base
-	add r0,r7,#0x8000			;@ 0x8000
-	str r0,vromBase0			;@ Spr & bg
-	str r0,vromBase1
-	add r0,r0,#0x18000
-	str r0,promBase				;@ Colour prom
-	add r0,r0,#0x240
-	cmp r11,#2
-	addeq r0,r0,#0x2000			;@ Manhattan 24 has speech in top of rom
-	str r0,vlmBase				;@ VLM speech data
+	ldr r7,=ROM_Space			;@ r7=rombase til end of loadcart so DON'T FUCK IT UP
+//	str r7,romStart				;@ Set rom base
+//	add r0,r7,#0x8000			;@ 0x8000
+//	str r0,vromBase0			;@ Spr & bg
+//	str r0,vromBase1
+//	add r0,r0,#0x18000
+//	str r0,promBase				;@ Colour prom
+//	add r0,r0,#0x240
+//	cmp r11,#2
+//	addeq r0,r0,#0x2000			;@ Manhattan 24 has speech in top of rom
+//	str r0,vlmBase				;@ VLM speech data
 
 	ldr r4,=MEMMAPTBL_
 	ldr r5,=RDMEMTBL_
@@ -148,6 +149,8 @@ tbLoop2:
 	ldr r0,=vlm5030Chip
 	ldr r0,[r0]
 	ldr r1,vlmBase
+	cmp r11,#2
+	addeq r1,r1,#0x2000			;@ Manhattan 24 has speech in top of rom
 	mov r2,#0x2000				;@ ROM size
 	blx VLM5030_set_rom
 
@@ -224,6 +227,7 @@ cartFlags:
 	.space 3
 
 romStart:
+mainCpu:
 	.long 0
 vromBase0:
 	.long 0
