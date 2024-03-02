@@ -50,8 +50,16 @@ loadCart: 		;@ Called from C:  r0=rom number, r1=emuflags
 	str r1,emuFlags
 	mov r11,r0
 
-	bl doCpuMappingJailBreak
+//	bl doCpuMappingJailBreak
+//	bl doCpuMappingFinalizer
+	cmp r11,#3
+	adrne r2,jailBreakMapping
+	adrpl r2,finalizerMapping
+	bl do6809MainCpuMapping
 
+	cmp r11,#3
+	movne r0,#CHIP_K005849
+	movpl r0,#CHIP_K005885
 	bl gfxReset
 	bl ioReset
 	bl soundReset
@@ -69,16 +77,29 @@ loadCart: 		;@ Called from C:  r0=rom number, r1=emuflags
 	bx lr
 
 ;@----------------------------------------------------------------------------
+doCpuMappingFinalizer:
+;@----------------------------------------------------------------------------
+	adr r2,finalizerMapping
+	b do6809MainCpuMapping
+;@----------------------------------------------------------------------------
 doCpuMappingJailBreak:
 ;@----------------------------------------------------------------------------
-	ldr r0,=m6809CPU0
-	ldr r1,=mainCpu
-	ldr r1,[r1]
 	adr r2,jailBreakMapping
-	b m6809Mapper
+	b do6809MainCpuMapping
+
+;@----------------------------------------------------------------------------
+finalizerMapping:						;@ Finalizer
+	.long emptySpace, FinalizerIO_R, FinalizerIO_W				;@ IO
+	.long emuRAM, k005885Ram_0R, k005885Ram_0W					;@ Graphic
+	.long 0, mem6809R2, rom_W									;@ ROM
+	.long 1, mem6809R3, rom_W									;@ ROM
+	.long 2, mem6809R4, rom_W									;@ ROM
+	.long 3, mem6809R5, rom_W									;@ ROM
+	.long 4, mem6809R6, rom_W									;@ ROM
+	.long 5, mem6809R7, rom_W									;@ ROM
 ;@----------------------------------------------------------------------------
 jailBreakMapping:						;@ Jail Break
-	.long emuRAM, k005885Ram_0R, k005885Ram_0W					;@ Graphic
+	.long emuRAM, k005849Ram_0R, k005849Ram_0W					;@ Graphic
 	.long emptySpace, IO_R, IO_W								;@ IO
 	.long emptySpace, VLM_R, VLM_W								;@ VLM
 	.long emptySpace, VLM_R, VLM_W								;@ VLM
@@ -87,6 +108,12 @@ jailBreakMapping:						;@ Jail Break
 	.long 2, mem6809R6, rom_W									;@ ROM
 	.long 3, mem6809R7, rom_W									;@ ROM
 
+;@----------------------------------------------------------------------------
+do6809MainCpuMapping:
+;@----------------------------------------------------------------------------
+	ldr r0,=m6809CPU0
+	ldr r1,=mainCpu
+	ldr r1,[r1]
 ;@----------------------------------------------------------------------------
 m6809Mapper:		;@ Rom paging.. r0=cpuptr, r1=romBase, r2=mapping table.
 ;@----------------------------------------------------------------------------
@@ -132,6 +159,9 @@ cartFlags:
 
 romStart:
 mainCpu:
+	.long 0
+cpu2Start:
+soundCpu:
 	.long 0
 vromBase0:
 	.long 0

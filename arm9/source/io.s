@@ -3,12 +3,6 @@
 #include "K005849/K005849.i"
 #include "Shared/EmuMenu.i"
 
-	.global ioReset
-	.global IO_R
-	.global IO_W
-	.global convertInput
-	.global refreshEMUjoypads
-
 	.global joyCfg
 	.global EMUinput
 	.global gDipSwitch0
@@ -17,6 +11,14 @@
 	.global gDipSwitch3
 	.global coinCounter0
 	.global coinCounter1
+
+	.global ioReset
+	.global convertInput
+	.global refreshEMUjoypads
+	.global IO_R
+	.global IO_W
+	.global FinalizerIO_R
+	.global FinalizerIO_W
 
 	addy		.req r12		;@ Used by CPU cores
 
@@ -123,6 +125,17 @@ Input2_R:		;@ Coins, Start & Service
 	eor r0,r0,#0xFF
 	bx lr
 ;@----------------------------------------------------------------------------
+Input2_R_Finalizer:		;@ Coins, Start & Service
+;@----------------------------------------------------------------------------
+;@	mov r11,r11					;@ No$GBA breakpoint
+	ldrb r0,joy2State
+	ldr koptr,=k005849_0
+	ldr r1,[koptr,#scanline]
+	cmp r1,#224
+	orrpl r0,r0,#0x80
+	eor r0,r0,#0xFF
+	bx lr
+;@----------------------------------------------------------------------------
 Input3_R:
 ;@----------------------------------------------------------------------------
 	ldrb r0,gDipSwitch0
@@ -140,6 +153,43 @@ Input5_R:
 	ldrb r0,gDipSwitch2
 	eor r0,r0,#0xFF
 	bx lr
+
+;@----------------------------------------------------------------------------
+FinalizerIO_R:			;@ I/O read
+;@----------------------------------------------------------------------------
+	bics r2,addy,#0x0800
+	beq Input5_R
+	cmp r2,#0x0008
+	beq Input4_R
+	bic r2,r2,#3
+	cmp r2,#0x0010
+	and r2,addy,#3
+	ldreq pc,[pc,r2,lsl#2]
+;@---------------------------
+	b k005885_0R
+;@io_read_tbl
+	.long Input2_R_Finalizer	;@ 0x0810
+	.long Input0_R				;@ 0x0811
+	.long Input1_R				;@ 0x0812
+	.long Input3_R				;@ 0x0813
+
+;@----------------------------------------------------------------------------
+FinalizerIO_W:		;@I/O write
+;@----------------------------------------------------------------------------
+	bic r2,addy,#0x0800
+	cmp r2,#0x0018
+	beq watchDogW
+	cmp r2,#0x0019
+	beq coinW
+	cmp r2,#0x001A
+	beq SN_0_W
+	cmp r2,#0x001B
+	beq SN_0_W
+	cmp r2,#0x001C
+	beq watchDogW				;@ Sound cpu irq
+	cmp r2,#0x001D
+	beq watchDogW				;@ Sound cpu latch byte
+	b k005885_0W
 
 ;@----------------------------------------------------------------------------
 IO_R:			;@ I/O read

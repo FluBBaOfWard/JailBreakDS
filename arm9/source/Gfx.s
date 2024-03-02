@@ -61,9 +61,13 @@ gfxInit:					;@ Called from machineInit
 scaleParms:					;@  NH     FH     NV     FV
 	.long OAM_BUFFER1,0x0000,0x0100,0xff01,0x0120,0xfee1
 ;@----------------------------------------------------------------------------
-gfxReset:					;@ Called with CPU reset
+gfxReset:					;@ Called with CPU reset, r0 = chip type
 ;@----------------------------------------------------------------------------
 	stmfd sp!,{lr}
+	ldrb r1,gfxChipType
+	strb r0,gfxChipType
+	cmp r0,r1
+	blne gfxInit
 
 	ldr r0,=gfxState
 	mov r1,#5					;@ 5*4
@@ -224,13 +228,14 @@ vblIrqHandler:
 	ldr r5,=SCROLLBUFF
 	mov r4,r5
 
-	ldr r2,=scrollTemp
+	ldr r3,=scrollTemp
 	mov r12,#SCREEN_HEIGHT
 scrolLoop2:
-	ldr r0,[r2,r8,lsl#2]
+	ldr r0,[r3,r8,lsl#2]
 	add r0,r0,r7
 	mov r1,r0
-	stmia r4!,{r0-r1}
+	add r2,r7,#8				;@ Second bg layer
+	stmia r4!,{r0-r2}
 	adds r6,r6,r6,lsl#16
 	addcs r7,r7,#0x10000
 	adc r8,r8,#1
@@ -241,13 +246,13 @@ scrolLoop2:
 	mov r6,#REG_BASE
 	strh r6,[r6,#REG_DMA0CNT_H]	;@ DMA0 stop
 
-	add r1,r6,#REG_DMA0SAD
-	mov r2,r5					;@ Setup DMA buffer for scrolling:
-	ldmia r2!,{r4-r5}			;@ Read
-	add r3,r6,#REG_BG0HOFS		;@ DMA0 always goes here
-	stmia r3,{r4-r5}			;@ Set 1st value manually, HBL is AFTER 1st line
-	ldr r4,=0x96600002			;@ noIRQ hblank 32bit repeat incsrc inc_reloaddst, 2 word
-	stmia r1,{r2-r4}			;@ DMA0 go
+	add r0,r6,#REG_DMA0SAD
+	mov r1,r5					;@ Setup DMA buffer for scrolling:
+	ldmia r1!,{r3-r5}			;@ Read
+	add r2,r6,#REG_BG0HOFS		;@ DMA0 always goes here
+	stmia r2,{r3-r5}			;@ Set 1st value manually, HBL is AFTER 1st line
+	ldr r3,=0x96600003			;@ noIRQ hblank 32bit repeat incsrc inc_reloaddst, 3 word
+	stmia r0,{r1-r3}			;@ DMA0 go
 
 	add r1,r6,#REG_DMA3SAD
 
@@ -268,6 +273,10 @@ scrolLoop2:
 
 	ldr koptr,=k005849_0
 	ldrb r2,[koptr,#sprBank]
+	cmp r7,#CHIP_K005849
+	ldrheq r0,GFX_BG0CNT
+	ldrne r0,=0x000A
+	strh r0,[r6,#REG_BG0CNT]
 
 	mov r0,#0x0017
 	tst r2,#0x04				;@ Is left/right overlay on?

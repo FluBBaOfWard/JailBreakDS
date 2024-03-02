@@ -103,6 +103,8 @@
 		9CBEE11126F123C70095347A /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		9CBEE11226F123D00095347A /* EmuSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmuSettings.h; sourceTree = "<group>"; };
 		9CBEE11326F123D10095347A /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		9CE2E07E2B939E8000B19B2B /* Finalizer.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = Finalizer.c; sourceTree = "<group>"; };
+		9CE2E07F2B939E8000B19B2B /* Finalizer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Finalizer.h; sourceTree = "<group>"; };
 		A4AA02141B04077F0043E4D4 /* History.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = History.txt; sourceTree = "<group>"; };
 		A4DA29B117651A3800810B12 /* JailBreakDS_todo.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = JailBreakDS_todo.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -253,6 +255,8 @@
 				9C50822325D472EE00A8E1BA /* Gui.c */,
 				9C50822125D472EE00A8E1BA /* FileHandling.h */,
 				9C50822825D472EE00A8E1BA /* FileHandling.c */,
+				9CE2E07F2B939E8000B19B2B /* Finalizer.h */,
+				9CE2E07E2B939E8000B19B2B /* Finalizer.c */,
 				9C7BB96326009B7900EA9C9C /* JailBreak.h */,
 				9C7BB96426009B7900EA9C9C /* JailBreak.c */,
 				9C50822A25D472EE00A8E1BA /* Cart.h */,
