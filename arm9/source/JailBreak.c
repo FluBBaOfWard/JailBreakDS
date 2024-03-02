@@ -45,10 +45,10 @@ static const ArcadeRom jailbrekRoms[17] = {
 	{"507l08.4f",  0x4000, 0xe3b7a226},
 	{"507j09.5f",  0x4000, 0x504f0912},
 	{ROM_REGION,   0x0240, (int)&promBase},
-	{"507j10.1f",  0x0020, 0xf1909605},
-	{"507j11.2f",  0x0020, 0xf70bb122},
-	{"507j13.7f",  0x0100, 0xd4fe5c97},
-	{"507j12.6f",  0x0100, 0x0266c7db},
+	{"507j10.1f",  0x0020, 0xf1909605}, // RG Palette
+	{"507j11.2f",  0x0020, 0xf70bb122}, // B Palette
+	{"507j12.6f",  0x0100, 0x0266c7db}, // Sprite Pal LUT
+	{"507j13.7f",  0x0100, 0xd4fe5c97}, // Character Pal LUT
 	{ROM_REGION,   0x4000, (int)&vlmBase}, // Speech rom
 	{"507l01.8c",  0x4000, 0x0c8a3605},
 };
@@ -61,10 +61,10 @@ static const ArcadeRom jailbrekbRoms[13] = {
 	{"4.g6",     0x8000, 0xe34b93b8},
 	{"3.h6",     0x8000, 0xbf67a8ff},
 	{ROM_REGION, 0x0240, (int)&promBase},
-	{"prom.j2",  0x0020, 0xf1909605},
-	{"prom.i2",  0x0020, 0xf70bb122},
-	{"prom.d6",  0x0100, 0xd4fe5c97},
-	{"prom.e6",  0x0100, 0x0266c7db},
+	{"prom.j2",  0x0020, 0xf1909605}, // RG Palette
+	{"prom.i2",  0x0020, 0xf70bb122}, // B Palette
+	{"prom.e6",  0x0100, 0x0266c7db}, // Sprite Pal LUT
+	{"prom.d6",  0x0100, 0xd4fe5c97}, // Character Pal LUT
 	{ROM_REGION,  0x2000, (int)&vlmBase}, // Speech rom
 	{"2.i6",      0x2000, 0xd91d15e3},
 	// ROM_REGION( 0x0004, "plds", 0 )
@@ -86,10 +86,10 @@ static const ArcadeRom manhatanRoms[17] = {
 	{"507j08.4f",  0x4000, 0x175e1b49},
 	{"507j09.5f",  0x4000, 0x504f0912},
 	{ROM_REGION,   0x0240, (int)&promBase},
-	{"507j10.1f",  0x0020, 0xf1909605},
-	{"507j11.2f",  0x0020, 0xf70bb122},
-	{"507j13.7f",  0x0100, 0xd4fe5c97},
-	{"507j12.6f",  0x0100, 0x0266c7db},
+	{"507j10.1f",  0x0020, 0xf1909605}, // RG Palette
+	{"507j11.2f",  0x0020, 0xf70bb122}, // B Palette
+	{"507j12.6f",  0x0100, 0x0266c7db}, // Sprite Pal LUT
+	{"507j13.7f",  0x0100, 0xd4fe5c97}, // Character Pal LUT
 	{ROM_REGION,   0x4000, (int)&vlmBase}, // Speech rom
 	{"507p01.8c",  0x4000, 0x973fa351},
 };

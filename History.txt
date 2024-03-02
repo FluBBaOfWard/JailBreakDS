@@ -2,7 +2,7 @@ JailBreakDS revision history
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 
-V0.3.7 - 2024-02-24 (FluBBa)
+V0.3.7 - 2024-03-02 (FluBBa)
 	Added new debug menu.
 	Better menu traversing.
 

@@ -154,38 +154,33 @@ gammaConvert:	;@ Takes value in r0(0-0xFF), gamma in r1(0-4),returns new value i
 paletteTxAll:				;@ Called from ui.c
 	.type paletteTxAll STT_FUNC
 ;@----------------------------------------------------------------------------
-	stmfd sp!,{r4-r5}
+	stmfd sp!,{lr}
 
-	ldr r2,=promBase			;@ Proms
-	ldr r2,[r2]
-	add r2,r2,#64
-	ldr r3,=MAPPED_RGB+32
-	ldr r4,=EMUPALBUFF
-	add r5,r4,#512
-	mov r1,#256
-noMap2:
-	ldrb r0,[r2],#1
-	and r0,r0,#0xF
-	mov r0,r0,lsl#1
-	ldrh r0,[r3,r0]
-	strh r0,[r4],#2
-	subs r1,r1,#1
-	bne noMap2
-
-	sub r3,r3,#32
-	mov r1,#256
-noMap3:
-	ldrb r0,[r2],#1
-	and r0,r0,#0xF
-	mov r0,r0,lsl#1
-	ldrh r0,[r3,r0]
-	strh r0,[r5],#2
-	subs r1,r1,#1
-	bne noMap3
-
-	ldmfd sp!,{r4-r5}
+	ldr r1,=promBase			;@ Proms
+	ldr r1,[r1]
+	add r1,r1,#32				;@ LUT
+	ldr r2,=MAPPED_RGB
+	ldr r0,=EMUPALBUFF+0x200	;@ Sprites first
+	bl paletteTx0
+	add r2,r2,#0x20
+	ldr r0,=EMUPALBUFF
+	bl paletteTx0
+	ldmfd sp!,{lr}
 	bx lr
 
+;@----------------------------------------------------------------------------
+paletteTx0:					;@ r0=dst, r1=source, r2=Palette
+;@----------------------------------------------------------------------------
+	mov r3,#256
+palTx0Loop:
+	ldrb r12,[r1],#1
+	and r12,r12,#0xF
+	mov r12,r12,lsl#1
+	ldrh r12,[r2,r12]
+	strh r12,[r0],#2
+	subs r3,r3,#1
+	bne palTx0Loop
+	bx lr
 ;@----------------------------------------------------------------------------
 vblIrqHandler:
 	.type vblIrqHandler STT_FUNC
