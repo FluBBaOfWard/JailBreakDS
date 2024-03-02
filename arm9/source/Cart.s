@@ -4,66 +4,27 @@
 #include "ARM6809/ARM6809mac.h"
 #include "K005849/K005849.i"
 
-	.global machineInit
-	.global loadCart
-	.global m6809Mapper
+	.global romNum
 	.global emuFlags
 	.global cartFlags
 	.global romStart
 	.global mainCpu
+	.global soundCpu
 	.global vromBase0
 	.global vromBase1
 	.global promBase
 	.global vlmBase
-
 	.global ROM_Space
+	.global emptySpace
 
+	.global machineInit
+	.global loadCart
+	.global m6809Mapper
 
 	.syntax unified
 	.arm
 
-	.section .rodata
-	.align 2
-
-rawRom:
-/*
-// Code
-	.incbin "jailbrek/507p03.11d"
-	.incbin "jailbrek/507p02.9d"
-// Gfx
-	.incbin "jailbrek/507j04.3e"
-	.incbin "jailbrek/507j05.4e"
-	.incbin "jailbrek/507j06.5e"
-	.incbin "jailbrek/507j07.3f"
-	.incbin "jailbrek/507l08.4f"
-	.incbin "jailbrek/507j09.5f"
-// Proms
-	.incbin "jailbrek/507j10.1f"
-	.incbin "jailbrek/507j11.2f"
-	.incbin "jailbrek/507j13.7f"
-	.incbin "jailbrek/507j12.6f"
-// VLM data
-	.incbin "jailbrek/507l01.8c"
-*/
-/*
-// Code
-	.incbin "jailbrek/507n03.11d"
-	.incbin "jailbrek/507n02.9d"
- // Gfx
-	.incbin "jailbrek/507j04.3e"
-	.incbin "jailbrek/507j05.4e"
-	.incbin "jailbrek/507j06.5e"
-	.incbin "jailbrek/507j07.3f"
-	.incbin "jailbrek/507j08.4f"
-	.incbin "jailbrek/507j09.5f"
- // Proms
-	.incbin "jailbrek/507j10.1f"
-	.incbin "jailbrek/507j11.2f"
-	.incbin "jailbrek/507j13.7f"
-	.incbin "jailbrek/507j12.6f"
- // VLM data
-	.incbin "jailbrek/507p01.8c"
-*/
+	.section .text
 	.align 2
 ;@----------------------------------------------------------------------------
 machineInit: 	;@ Called from C
@@ -89,57 +50,7 @@ loadCart: 		;@ Called from C:  r0=rom number, r1=emuflags
 	str r1,emuFlags
 	mov r11,r0
 
-//	ldr r7,=rawRom
-	ldr r7,=ROM_Space			;@ r7=rombase til end of loadcart so DON'T FUCK IT UP
-//	str r7,romStart				;@ Set rom base
-//	add r0,r7,#0x8000			;@ 0x8000
-//	str r0,vromBase0			;@ Spr & bg
-//	str r0,vromBase1
-//	add r0,r0,#0x18000
-//	str r0,promBase				;@ Colour prom
-//	add r0,r0,#0x240
-//	cmp r11,#2
-//	addeq r0,r0,#0x2000			;@ Manhattan 24 has speech in top of rom
-//	str r0,vlmBase				;@ VLM speech data
-
-	ldr r4,=MEMMAPTBL_
-	ldr r5,=RDMEMTBL_
-	ldr r6,=WRMEMTBL_
-
-	mov r0,#0
-	ldr r2,=mem6809R0
-	ldr r3,=rom_W
-tbLoop1:
-	add r1,r7,r0,lsl#13
-	bl initMappingPage
-	add r0,r0,#1
-	cmp r0,#0x88
-	bne tbLoop1
-
-	ldr r2,=empty_R
-	ldr r3,=empty_W
-tbLoop2:
-	bl initMappingPage
-	add r0,r0,#1
-	cmp r0,#0x100
-	bne tbLoop2
-
-	mov r0,#0xFB				;@ empty
-	ldr r2,=VLM_R
-	ldr r3,=VLM_W
-	bl initMappingPage
-
-	mov r0,#0xFC				;@ Graphic
-	ldr r1,=emuRAM
-	ldr r2,=mem6809R0
-	ldr r3,=k005849Ram_0W
-	bl initMappingPage
-
-	mov r0,#0xFD				;@ IO
-	ldr r2,=IO_R
-	ldr r3,=IO_W
-	bl initMappingPage
-
+	bl doCpuMappingJailBreak
 
 	bl gfxReset
 	bl ioReset
@@ -157,59 +68,52 @@ tbLoop2:
 	ldmfd sp!,{r4-r11,lr}
 	bx lr
 
+;@----------------------------------------------------------------------------
+doCpuMappingJailBreak:
+;@----------------------------------------------------------------------------
+	ldr r0,=m6809CPU0
+	ldr r1,=mainCpu
+	ldr r1,[r1]
+	adr r2,jailBreakMapping
+	b m6809Mapper
+;@----------------------------------------------------------------------------
+jailBreakMapping:						;@ Jail Break
+	.long emuRAM, k005885Ram_0R, k005885Ram_0W					;@ Graphic
+	.long emptySpace, IO_R, IO_W								;@ IO
+	.long emptySpace, VLM_R, VLM_W								;@ VLM
+	.long emptySpace, VLM_R, VLM_W								;@ VLM
+	.long 0, mem6809R4, rom_W									;@ ROM
+	.long 1, mem6809R5, rom_W									;@ ROM
+	.long 2, mem6809R6, rom_W									;@ ROM
+	.long 3, mem6809R7, rom_W									;@ ROM
 
 ;@----------------------------------------------------------------------------
-initMappingPage:	;@ r0=page, r1=mem, r2=rdMem, r3=wrMem
+m6809Mapper:		;@ Rom paging.. r0=cpuptr, r1=romBase, r2=mapping table.
 ;@----------------------------------------------------------------------------
-	str r1,[r4,r0,lsl#2]
-	str r2,[r5,r0,lsl#2]
-	str r3,[r6,r0,lsl#2]
-	bx lr
+	stmfd sp!,{r4-r8,lr}
 
-;@----------------------------------------------------------------------------
-//	.section itcm
-;@----------------------------------------------------------------------------
+	add r7,r0,#m6809MemTbl
+	add r8,r0,#m6809ReadTbl
+	add lr,r0,#m6809WriteTbl
 
-;@----------------------------------------------------------------------------
-m6809Mapper:		;@ Rom paging..
-;@----------------------------------------------------------------------------
-	ands r0,r0,#0xFF			;@ Safety
-	bxeq lr
-	stmfd sp!,{r3-r8,lr}
-	ldr r5,=MEMMAPTBL_
-	ldr r2,[r5,r1,lsl#2]!
-	ldr r3,[r5,#-1024]			;@ RDMEMTBL_
-	ldr r4,[r5,#-2048]			;@ WRMEMTBL_
+	mov r6,#8
+m6809M2Loop:
+	ldmia r2!,{r3-r5}
+	cmp r3,#0x100
+	addmi r3,r1,r3,lsl#13
+	rsb r0,r6,#8
+	sub r3,r3,r0,lsl#13
 
-	mov r5,#0
-	cmp r1,#0x88
-	movmi r5,#12
-
-	add r6,m6809ptr,#m6809ReadTbl
-	add r7,m6809ptr,#m6809WriteTbl
-	add r8,m6809ptr,#m6809MemTbl
-	b m6809Memaps
-m6809Memapl:
-	add r6,r6,#4
-	add r7,r7,#4
-	add r8,r8,#4
-m6809Memap2:
-	add r3,r3,r5
-	sub r2,r2,#0x2000
-m6809Memaps:
-	movs r0,r0,lsr#1
-	bcc m6809Memapl				;@ C=0
-	strcs r3,[r6],#4			;@ readmem_tbl
-	strcs r4,[r7],#4			;@ writemem_tb
-	strcs r2,[r8],#4			;@ memmap_tbl
-	bne m6809Memap2
-
+	str r3,[r7],#4
+	str r4,[r8],#4
+	str r5,[lr],#4
+	subs r6,r6,#1
+	bne m6809M2Loop
 ;@------------------------------------------
 m6809Flush:		;@ Update cpu_pc & lastbank
 ;@------------------------------------------
 	reEncodePC
-
-	ldmfd sp!,{r3-r8,lr}
+	ldmfd sp!,{r4-r8,lr}
 	bx lr
 
 ;@----------------------------------------------------------------------------
@@ -240,14 +144,10 @@ vlmBase:
 
 
 	.section .bss
-WRMEMTBL_:
-	.space 256*4
-RDMEMTBL_:
-	.space 256*4
-MEMMAPTBL_:
-	.space 256*4
 ROM_Space:
-	.space 0x24240
+	.space 0x2CA40
+emptySpace:
+	.space 0x2000
 ;@----------------------------------------------------------------------------
 	.end
 #endif // #ifdef __arm__

@@ -8,6 +8,12 @@
 	.global empty_W
 	.global rom_W
 	.global mem6809R0
+	.global mem6809R2
+	.global mem6809R3
+	.global mem6809R4
+	.global mem6809R5
+	.global mem6809R6
+	.global mem6809R7
 
 	.syntax unified
 	.arm

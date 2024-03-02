@@ -33,7 +33,7 @@ int getStateSize() {
 	return size;
 }
 
-static const ArcadeRom jailbrekRoms[17] = {
+const ArcadeRom jailbrekRoms[17] = {
 	{ROM_REGION,  0x10000, (int)&mainCpu},
 	{"507p03.11d", 0x4000, 0xa0b88dfd},
 	{"507p02.9d",  0x4000, 0x444b7d8e},
@@ -53,7 +53,7 @@ static const ArcadeRom jailbrekRoms[17] = {
 	{"507l01.8c",  0x4000, 0x0c8a3605},
 };
 
-static const ArcadeRom jailbrekbRoms[13] = {
+const ArcadeRom jailbrekbRoms[13] = {
 	{ROM_REGION, 0x10000, (int)&mainCpu},
 	{"1.k6",     0x8000, 0xdf0e8fc7},
 	{ROM_REGION, 0x20000, (int)&vromBase0},
@@ -74,7 +74,7 @@ static const ArcadeRom jailbrekbRoms[13] = {
 	//{"k8.bin",  0x0001, NO_DUMP ) // PAL16L8
 };
 
-static const ArcadeRom manhatanRoms[17] = {
+const ArcadeRom manhatanRoms[17] = {
 	{ROM_REGION,   0x10000, (int)&mainCpu},
 	{"507n03.11d", 0x4000, 0xe5039f7e},
 	{"507n02.9d",  0x4000, 0x143cc62c},

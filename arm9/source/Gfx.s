@@ -4,26 +4,37 @@
 #include "Shared/EmuSettings.h"
 #include "K005849/K005849.i"
 
+	.global gfxState
+	.global gFlicker
+	.global gTwitch
+	.global gScaling
+	.global gGfxMask
+	.global yStart
+	.global k005849_0
+	.global k005885_0
+	.global emuRAM
+
+	.global GFX_DISPCNT
+	.global GFX_BG0CNT
+	.global GFX_BG1CNT
+	.global GFX_BG2CNT
+
 	.global gfxInit
 	.global gfxReset
 	.global paletteInit
 	.global paletteTxAll
 	.global refreshGfx
 	.global endFrame
-	.global gfxState
-	.global gFlicker
-	.global gTwitch
-	.global gScaling
-	.global gGfxMask
 	.global vblIrqHandler
-	.global yStart
 
-	.global k005849_0
 	.global k005849Ram_0R
 	.global k005849_0R
 	.global k005849Ram_0W
 	.global k005849_0W
-	.global emuRAM
+	.global k005885Ram_0R
+	.global k005885_0R
+	.global k005885Ram_0W
+	.global k005885_0W
 
 	addy		.req r12		;@ Used by CPU cores
 
@@ -71,7 +82,7 @@ gfxReset:					;@ Called with CPU reset
 	ldr r2,=m6809SetFIRQPin		;@ 1/2 VBlank
 	ldr r3,=emuRAM
 	bl k005849Reset0
-	mov r0,#CHIP_K005849
+	ldrb r0,gfxChipType
 	bl k005849SetType
 	bl bgInit
 
@@ -82,23 +93,30 @@ gfxReset:					;@ Called with CPU reset
 
 	ldmfd sp!,{pc}
 ;@----------------------------------------------------------------------------
-bgInit:					;@ BG tiles
+bgInit:					;@ BG tiles, r0=chip type
 ;@----------------------------------------------------------------------------
 	stmfd sp!,{lr}
+	cmp r0,#CHIP_K005849
 	ldr r0,=BG_GFX+0x8000		;@ r0 = NDS BG tileset
 	str r0,[koptr,#bgrGfxDest]
-	ldr r0,=Gfx1Bg
+	ldr r0,=Gfx1Bg				;@ r0 = DST tileset
 	str r0,[koptr,#spriteRomBase]
 	str r0,[koptr,#bgrRomBase]
-	ldr r1,=vromBase0
-	ldr r1,[r1]					;@ r1 = even bytes
+	ldr r1,=vromBase0			;@ r1 = bitplane 0
+	ldr r1,[r1]
+	beq do5849Tiles
+	add r2,r1,#0x10000			;@ r2 = bitplane 1
+	mov r3,#0x20000				;@ Length
+	bl convertTiles5885
+	b skip5849T
+do5849Tiles:
 	mov r2,#0x18000				;@ Length
 	bl convertTiles5849
+skip5849T:
 	ldr r0,=BG_GFX+0x4000		;@ r0 = NDS BG tileset
 	bl addBackgroundTiles
 
-	ldmfd sp!,{lr}
-	bx lr
+	ldmfd sp!,{pc}
 
 ;@----------------------------------------------------------------------------
 paletteInit:		;@ r0-r3 modified.
@@ -158,7 +176,7 @@ paletteTxAll:				;@ Called from ui.c
 
 	ldr r1,=promBase			;@ Proms
 	ldr r1,[r1]
-	add r1,r1,#32				;@ LUT
+	add r1,r1,#64				;@ LUT
 	ldr r2,=MAPPED_RGB
 	ldr r0,=EMUPALBUFF+0x200	;@ Sprites first
 	bl paletteTx0
@@ -236,7 +254,10 @@ scrolLoop2:
 	ldr r2,dmaOamBuffer			;@ DMA3 src, OAM transfer:
 	mov r3,#OAM					;@ DMA3 dst
 	mov r4,#0x84000000			;@ noIRQ 32bit incsrc incdst
-	orr r4,r4,#48*2				;@ 48 sprites * 2 longwords
+	ldrb r7,gfxChipType
+	cmp r7,#CHIP_K005849
+	orreq r4,r4,#48*2			;@ 48 sprites * 2 longwords
+	orrne r4,r4,#64*2			;@ 64 sprites * 2 longwords
 	stmia r1,{r2-r4}			;@ DMA3 go
 
 	ldr r2,=EMUPALBUFF			;@ DMA3 src, Palette transfer:
@@ -245,12 +266,15 @@ scrolLoop2:
 	orr r4,r4,#0x100			;@ 256 words (1024 bytes)
 	stmia r1,{r2-r4}			;@ DMA3 go
 
-	mov r0,#0x001F
+	ldr koptr,=k005849_0
+	ldrb r2,[koptr,#sprBank]
+
+	mov r0,#0x0017
+	tst r2,#0x04				;@ Is left/right overlay on?
+	biceq r0,#0x0004
 	ldrb r1,gGfxMask
 	bic r0,r0,r1
 	strh r0,[r6,#REG_WININ]
-	ldr koptr,=k005849_0
-	ldrb r2,[koptr,#sprBank]
 	tst r2,#0x80				;@ 240/256 screen width.
 	ldreq r0,=0x00FF			;@ start-end
 	ldrne r0,=0x08F8			;@ start-end
@@ -307,6 +331,12 @@ tmpOamBuffer:		.long OAM_BUFFER1
 dmaOamBuffer:		.long OAM_BUFFER2
 
 oamBufferReady:		.long 0
+GFX_DISPCNT:		.long 0
+GFX_BG0CNT:			.short 0
+GFX_BG1CNT:			.short 0
+GFX_BG2CNT:			.short 0
+GFX_BG3CNT:			.short 0
+
 ;@----------------------------------------------------------------------------
 k005849Reset0:			;@ r0=periodicIrqFunc, r1=frameIrqFunc, r2=frame2IrqFunc, r3=ram+LUTs
 ;@----------------------------------------------------------------------------
@@ -346,6 +376,45 @@ k005849_0W:					;@ I/O write  (0x2000-0x2044)
 	bl k005849_W
 	ldmfd sp!,{addy,pc}
 
+;@----------------------------------------------------------------------------
+k005885Reset0:			;@ r0=periodicIrqFunc, r1=frameIrqFunc, r2=frame2IrqFunc
+;@----------------------------------------------------------------------------
+	adr koptr,k005885_0
+	b k005849Reset
+;@----------------------------------------------------------------------------
+k005885Ram_0R:				;@ Ram read (0x2000-0x3FFF)
+;@----------------------------------------------------------------------------
+	stmfd sp!,{addy,lr}
+	mov r1,addy
+	adr koptr,k005885_0
+	bl k005885Ram_R
+	ldmfd sp!,{addy,pc}
+;@----------------------------------------------------------------------------
+k005885_0R:					;@ I/O read, 0x0000-0x005F
+;@----------------------------------------------------------------------------
+	stmfd sp!,{addy,lr}
+	mov r1,addy
+	adr koptr,k005885_0
+	bl k005885_R
+	ldmfd sp!,{addy,pc}
+
+;@----------------------------------------------------------------------------
+k005885Ram_0W:				;@ Ram write (0x2000-0x3FFF)
+;@----------------------------------------------------------------------------
+	stmfd sp!,{addy,lr}
+	mov r1,addy
+	adr koptr,k005885_0
+	bl k005885Ram_W
+	ldmfd sp!,{addy,pc}
+;@----------------------------------------------------------------------------
+k005885_0W:					;@ I/O write  (0x0000-0x005F)
+;@----------------------------------------------------------------------------
+	stmfd sp!,{addy,lr}
+	mov r1,addy
+	adr koptr,k005885_0
+	bl k005885_W
+	ldmfd sp!,{addy,pc}
+
 k005849_0:
 k005885_0:
 	.space k005849Size
@@ -355,11 +424,11 @@ gfxState:
 adjustBlend:
 	.long 0
 windowTop:
-	.long 0,0,0,0		;@ L/R scrolling in unscaled mode
+	.long 0,0,0,0				;@ L/R scrolling in unscaled mode
 
-	.byte 0
-	.byte 0
-	.byte 0,0
+gfxChipType:
+	.byte CHIP_K005849			;@ K005849 or K005885
+	.space 3
 
 	.section .bss
 scrollTemp:
@@ -369,9 +438,9 @@ OAM_BUFFER1:
 OAM_BUFFER2:
 	.space 0x400
 SCROLLBUFF:
-	.space 0x400*2				;@ Scrollbuffer.
+	.space 0x400*3				;@ Scrollbuffer.
 MAPPED_RGB:
-	.space 0x400
+	.space 0x400				;@ 0x400
 EMUPALBUFF:
 	.space 0x400
 emuRAM:

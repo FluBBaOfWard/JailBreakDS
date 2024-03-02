@@ -18,6 +18,12 @@ static const char *const settingName = "settings.cfg";
 ConfigData cfg;
 static int selectedGame = 0;
 
+const ArcadeGame allGames[GAME_COUNT] = {
+	AC_GAME("jailbrek",  "Jail Break", jailbrekRoms)
+	AC_GAME("jailbrekb", "Jail Break (bootleg)", jailbrekbRoms)
+	AC_GAME("manhatan",  "Manhattan 24 Bunsyo (Japan)", manhatanRoms)
+};
+
 //---------------------------------------------------------------------------------
 int loadSettings() {
 	FILE *file;
@@ -101,7 +107,7 @@ void saveState() {
 
 //---------------------------------------------------------------------------------
 static bool loadRoms(int gameNr, bool doLoad) {
-	return loadACRoms(ROM_Space, jailbrekGames, gameNr, ARRSIZE(jailbrekGames), doLoad);
+	return loadACRoms(ROM_Space, allGames, gameNr, ARRSIZE(allGames), doLoad);
 }
 
 bool loadGame(int gameNr) {
@@ -113,7 +119,7 @@ bool loadGame(int gameNr) {
 	drawText(" Loading roms", 10, 0);
 	loadRoms(gameNr, true);
 	selectedGame = gameNr;
-	strlcpy(currentFilename, jailbrekGames[selectedGame].gameName, sizeof(currentFilename));
+	strlcpy(currentFilename, allGames[selectedGame].gameName, sizeof(currentFilename));
 	setEmuSpeed(0);
 	loadCart(gameNr,0);
 	if (emuSettings & AUTOLOAD_STATE) {
