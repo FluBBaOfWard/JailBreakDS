@@ -65,8 +65,8 @@ const ArcadeRom finalizraRoms[20] = {
 	{ROM_REGION,   0x20000, (int)&vromBase0},
 	{"523h04.5e",   0x4000, 0xc056d710},
 	{"523h05.6e",   0x4000, 0xae0d0f76},
-	{FILL0X00,      0x4000, 0x00000000}, // C000-ffff empty
 	{"523h06.7e",   0x4000, 0xd2db9689},
+	{FILL0X00,      0x4000, 0x00000000}, // C000-ffff empty
 	{"523h07.5f",   0x4000, 0x50e512ba},
 	{"523h08.6f",   0x4000, 0x79f44e17},
 	{"523h09.7f",   0x4000, 0x8896dc85},
@@ -87,8 +87,8 @@ const ArcadeRom finalizrbRoms[19] = {
 	{ROM_REGION,   0x20000, (int)&vromBase0},
 	{"523h04.5e",   0x4000, 0xc056d710},
 	{"523h05.6e",   0x4000, 0xae0d0f76},
-	{FILL0X00,      0x4000, 0x00000000}, // C000-ffff empty
 	{"523h06.7e",   0x4000, 0xd2db9689},
+	{FILL0X00,      0x4000, 0x00000000}, // C000-ffff empty
 	{"523h07.5f",   0x4000, 0x50e512ba},
 	{"523h08.6f",   0x4000, 0x79f44e17},
 	{"523h09.7f",   0x4000, 0x8896dc85},

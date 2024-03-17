@@ -7,15 +7,15 @@
 
 #define CYCLE_PSL (H_PIXEL_COUNT/4)
 
+	.global frameTotal
+	.global waitMaskIn
+	.global waitMaskOut
+	.global m6809CPU0
+
 	.global run
 	.global stepFrame
 	.global cpuInit
 	.global cpuReset
-	.global frameTotal
-	.global waitMaskIn
-	.global waitMaskOut
-
-	.global m6809CPU0
 
 	.syntax unified
 	.arm

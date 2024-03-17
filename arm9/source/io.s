@@ -15,8 +15,8 @@
 	.global ioReset
 	.global convertInput
 	.global refreshEMUjoypads
-	.global IO_R
-	.global IO_W
+	.global JailBreakIO_R
+	.global JailBreakIO_W
 	.global FinalizerIO_R
 	.global FinalizerIO_W
 
@@ -192,7 +192,7 @@ FinalizerIO_W:		;@I/O write
 	b k005885_0W
 
 ;@----------------------------------------------------------------------------
-IO_R:			;@ I/O read
+JailBreakIO_R:			;@ I/O read
 ;@----------------------------------------------------------------------------
 	cmp addy,#0x3100
 	beq Input4_R
@@ -211,7 +211,7 @@ IO_R:			;@ I/O read
 	.long Input3_R				;@ 0x3303
 
 ;@----------------------------------------------------------------------------
-IO_W:		;@I/O write
+JailBreakIO_W:		;@I/O write
 ;@----------------------------------------------------------------------------
 	cmp addy,#0x3100
 //	cmpne addy,#0x3200			;@ Make sound chip read value.

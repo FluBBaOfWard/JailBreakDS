@@ -105,6 +105,8 @@
 		9CBEE11326F123D10095347A /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		9CE2E07E2B939E8000B19B2B /* Finalizer.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = Finalizer.c; sourceTree = "<group>"; };
 		9CE2E07F2B939E8000B19B2B /* Finalizer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Finalizer.h; sourceTree = "<group>"; };
+		9CE2E0802B93D8E900B19B2B /* finalizr.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = finalizr.cpp; sourceTree = "<group>"; };
+		9CE2E0812B93D8E900B19B2B /* finalizrVideo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = finalizrVideo.cpp; sourceTree = "<group>"; };
 		A4AA02141B04077F0043E4D4 /* History.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = History.txt; sourceTree = "<group>"; };
 		A4DA29B117651A3800810B12 /* JailBreakDS_todo.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = JailBreakDS_todo.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -206,13 +208,13 @@
 		9CB812AE24C39B3500A02C09 /* VLM5030 */ = {
 			isa = PBXGroup;
 			children = (
-				9CBEE10D26F123900095347A /* README.md */,
 				9CB812B024C39B3500A02C09 /* VLM5030_todo.txt */,
+				9CBEE10D26F123900095347A /* README.md */,
 				9CB812B224C39B3500A02C09 /* History.txt */,
 				9CB812AF24C39B3500A02C09 /* Version.h */,
-				9CAB1A15274E1C9900182F62 /* VLM503Asm.s */,
 				9CB812B324C39B3500A02C09 /* vlm5030.h */,
 				9CB812B124C39B3500A02C09 /* vlm5030.c */,
+				9CAB1A15274E1C9900182F62 /* VLM503Asm.s */,
 			);
 			path = VLM5030;
 			sourceTree = "<group>";
@@ -348,6 +350,8 @@
 		A42D026F205FEE2200515C72 /* Docs */ = {
 			isa = PBXGroup;
 			children = (
+				9CE2E0802B93D8E900B19B2B /* finalizr.cpp */,
+				9CE2E0812B93D8E900B19B2B /* finalizrVideo.cpp */,
 				9C294944260A7A7200EDA7C9 /* jailbrek.cpp */,
 				9C294945260A7A7200EDA7C9 /* jailbrekVideo.cpp */,
 			);

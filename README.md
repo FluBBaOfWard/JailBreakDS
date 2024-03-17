@@ -1,6 +1,8 @@
 # JailBreakDS V0.3.7
 
-This is a Jail Break - Arcade emulator for the NDS.
+This has now been superseded by <https://github.com/FluBBaOfWard/K80DS>.
+
+This is a Jail Break & Finalizer - Arcade emulator for the NDS.
 It has bugs in the sprite rendering and no tile priority support.
 You should still be able to enjoy the game though. =)
 
@@ -82,4 +84,4 @@ Fredrik Ahlström
 
 X/Twitter @TheRealFluBBa
 
-https://www.github.com/FluBBaOfWard
+<https://www.github.com/FluBBaOfWard>

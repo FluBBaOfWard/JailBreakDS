@@ -12,7 +12,7 @@
 	.global yStart
 	.global k005849_0
 	.global k005885_0
-	.global emuRAM
+	.global GFX_RAM0
 
 	.global GFX_DISPCNT
 	.global GFX_BG0CNT
@@ -81,10 +81,9 @@ gfxReset:					;@ Called with CPU reset, r0 = chip type
 	mov r0,#0x0000
 	strh r0,[r1,#REG_WINOUT]
 
-	ldr r0,=m6809SetNMIPin		;@ Scanline counter
-	ldr r1,=m6809SetIRQPin		;@ VBlank
-	ldr r2,=m6809SetFIRQPin		;@ 1/2 VBlank
-	ldr r3,=emuRAM
+	ldr r0,=m6809SetNMIPinCurrentCpu	;@ Scanline counter
+	ldr r1,=m6809SetIRQPinCurrentCpu	;@ VBlank
+	ldr r2,=m6809SetFIRQPinCurrentCpu	;@ 1/2 VBlank
 	bl k005849Reset0
 	ldrb r0,gfxChipType
 	bl k005849SetType
@@ -347,8 +346,9 @@ GFX_BG2CNT:			.short 0
 GFX_BG3CNT:			.short 0
 
 ;@----------------------------------------------------------------------------
-k005849Reset0:			;@ r0=periodicIrqFunc, r1=frameIrqFunc, r2=frame2IrqFunc, r3=ram+LUTs
+k005849Reset0:			;@ r0=periodicIrqFunc, r1=frameIrqFunc, r2=frame2IrqFunc
 ;@----------------------------------------------------------------------------
+	ldr r3,=GFX_RAM0
 	ldr koptr,=k005849_0
 	b k005849Reset
 ;@----------------------------------------------------------------------------
@@ -388,6 +388,7 @@ k005849_0W:					;@ I/O write  (0x2000-0x2044)
 ;@----------------------------------------------------------------------------
 k005885Reset0:			;@ r0=periodicIrqFunc, r1=frameIrqFunc, r2=frame2IrqFunc
 ;@----------------------------------------------------------------------------
+	ldr r3,=GFX_RAM0
 	adr koptr,k005885_0
 	b k005849Reset
 ;@----------------------------------------------------------------------------
@@ -452,7 +453,7 @@ MAPPED_RGB:
 	.space 0x400				;@ 0x400
 EMUPALBUFF:
 	.space 0x400
-emuRAM:
+GFX_RAM0:
 	.space 0x2000
 	.space SPRBLOCKCOUNT*4
 	.space BGBLOCKCOUNT*4

@@ -24,10 +24,10 @@ DATA		:=
 #---------------------------------------------------------------------------------
 # options for code generation
 #---------------------------------------------------------------------------------
-ARCH	:=	-mthumb-interwork -mcpu=arm7tdmi
+ARCH	:=	-march=armv4t -mcpu=arm7tdmi -mtune=arm7tdmi -mthumb-interwork
 
 CFLAGS	:=	-g -Wall -O2 \
-		-mtune=arm7tdmi -fomit-frame-pointer \
+		-fomit-frame-pointer \
 		-ffast-math \
 		$(ARCH)
 

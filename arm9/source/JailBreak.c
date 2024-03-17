@@ -94,7 +94,7 @@ const ArcadeRom manhatanRoms[17] = {
 	{"507p01.8c",  0x4000, 0x973fa351},
 };
 
-const ArcadeGame jailbrekGames[GAME_COUNT] = {
+const ArcadeGame jailbrekGames[JB_GAME_COUNT] = {
 	AC_GAME("jailbrek",  "Jail Break", jailbrekRoms)
 	AC_GAME("jailbrekb", "Jail Break (bootleg)", jailbrekbRoms)
 	AC_GAME("manhatan",  "Manhattan 24 Bunsyo (Japan)", manhatanRoms)

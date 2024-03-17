@@ -77,20 +77,9 @@ loadCart: 		;@ Called from C:  r0=rom number, r1=emuflags
 	bx lr
 
 ;@----------------------------------------------------------------------------
-doCpuMappingFinalizer:
-;@----------------------------------------------------------------------------
-	adr r2,finalizerMapping
-	b do6809MainCpuMapping
-;@----------------------------------------------------------------------------
-doCpuMappingJailBreak:
-;@----------------------------------------------------------------------------
-	adr r2,jailBreakMapping
-	b do6809MainCpuMapping
-
-;@----------------------------------------------------------------------------
 finalizerMapping:						;@ Finalizer
 	.long emptySpace, FinalizerIO_R, FinalizerIO_W				;@ IO
-	.long emuRAM, k005885Ram_0R, k005885Ram_0W					;@ Graphic
+	.long GFX_RAM0, k005885Ram_0R, k005885Ram_0W				;@ Graphic
 	.long 0, mem6809R2, rom_W									;@ ROM
 	.long 1, mem6809R3, rom_W									;@ ROM
 	.long 2, mem6809R4, rom_W									;@ ROM
@@ -99,8 +88,8 @@ finalizerMapping:						;@ Finalizer
 	.long 5, mem6809R7, rom_W									;@ ROM
 ;@----------------------------------------------------------------------------
 jailBreakMapping:						;@ Jail Break
-	.long emuRAM, k005849Ram_0R, k005849Ram_0W					;@ Graphic
-	.long emptySpace, IO_R, IO_W								;@ IO
+	.long GFX_RAM0, k005849Ram_0R, k005849Ram_0W				;@ Graphic
+	.long emptySpace, JailBreakIO_R, JailBreakIO_W				;@ IO
 	.long emptySpace, VLM_R, VLM_W								;@ VLM
 	.long emptySpace, VLM_R, VLM_W								;@ VLM
 	.long 0, mem6809R4, rom_W									;@ ROM
@@ -109,11 +98,19 @@ jailBreakMapping:						;@ Jail Break
 	.long 3, mem6809R7, rom_W									;@ ROM
 
 ;@----------------------------------------------------------------------------
+doCpuMappingFinalizer:
+;@----------------------------------------------------------------------------
+	adr r2,finalizerMapping
+	b do6809MainCpuMapping
+;@----------------------------------------------------------------------------
+doCpuMappingJailBreak:
+;@----------------------------------------------------------------------------
+	adr r2,jailBreakMapping
+;@----------------------------------------------------------------------------
 do6809MainCpuMapping:
 ;@----------------------------------------------------------------------------
 	ldr r0,=m6809CPU0
-	ldr r1,=mainCpu
-	ldr r1,[r1]
+	ldr r1,mainCpu
 ;@----------------------------------------------------------------------------
 m6809Mapper:		;@ Rom paging.. r0=cpuptr, r1=romBase, r2=mapping table.
 ;@----------------------------------------------------------------------------
